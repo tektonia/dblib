@@ -9,7 +9,7 @@ public class DbUtils {
 	};
 
 	/**
-	 * <h4>getNumber</h4>
+	 * <h3>getNumber</h3>
 	 * <pre>public static int getNumber(DbResult res)</pre>
 	 * <br>Gets the first number from the result<br>
 	 * @param res - DbResult from an SQL execution
@@ -28,7 +28,7 @@ public class DbUtils {
 	}
 	
 	/**
-	 * <h4>getString</h4>
+	 * <h3>getString</h3>
 	 * <pre>public static String getString(DbResult res)</pre>
 	 * <br>Gets the first string from the result<br>
 	 * @param res - DbResult from an SQL execution
@@ -50,7 +50,7 @@ public class DbUtils {
 	}
   	
 	/**
-	 * <h4>getStringArray</h4>
+	 * <h3>getStringArray</h3>
 	 * <pre>public static String [] getStringArray(DbResult res)</pre>
 	 * <br>Gets an array of strings from the result<br>
 	 * @param res - DbResult from an SQL execution
@@ -73,7 +73,7 @@ public class DbUtils {
 	}	
 	
 	/**
-	 * <h4>getBoolean</h4>
+	 * <h3>getBoolean</h3>
 	 * <pre>public static boolean getBoolean(DbResult res)</pre>
 	 * <br>Gets the first boolean from the result<br>
 	 * @param res - DbResult from an SQL execution

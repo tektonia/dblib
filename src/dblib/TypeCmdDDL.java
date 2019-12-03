@@ -7,36 +7,38 @@ import java.sql.Statement;
 
 //DDL - Data Description Language
 //
-// Commandss type DDL = {"CREATE", "ALTER", "DROP", "TRUNCATE",
+// Commands type DDL = {"CREATE", "ALTER", "DROP", "TRUNCATE",
 //						"COMMENT", "RENAME"};
 //
 // Although not belonging to the DDL set, commands "LOAD", "INSERT", "UPDATE", "DELETE"
 // are also called here due to the use of the same method described.
 //
-public class TypeCmdDDL implements TypeComandoSQL{
+public class TypeCmdDDL implements TypeCommandSQL{
 	int numeroDeSequencia=0;
 	
 	protected TypeCmdDDL(){}
 	
 		@Override
-	public DbResult execute(Connection conn, String cmd) {
-		BDebug.write("DDL: "+cmd);
-		ResultSet res=null;	
+	public DbResult execute(Connection conn, String cmd) throws DbException {
+		if(DbSQL.getDebugLevel()>=1) BDebug.write("\nDDL: "+cmd);
 		String msg=null;
+		int errCode=-1;
 		try {
 			conn.setAutoCommit(false);
 			Statement declaracao = conn.createStatement();
 			numeroDeSequencia = declaracao.executeUpdate(cmd);
 			declaracao.close();
 			conn.commit();
-			DbSQL.clearLastError();
+			errCode=0;
 		} catch (SQLException e) {
+			numeroDeSequencia=-1;
 			msg=e.getMessage();
-			msg="\nSQLException: "+msg+"\n";
-			BDebug.write(msg); 
-			DbSQL.setLastError(msg);
+			errCode=e.getErrorCode();
+			if(errCode==0) errCode=-1;
+			msg="\nSQLException: "+errCode+" "+msg+"\n";
+			throw new DbException(msg, DbException.Causa.SQL_EXCEPTION); 
 		}
-		return(new DbResult(res, msg));
+		return(new DbResult(numeroDeSequencia, errCode, msg));
 	}
 
 }

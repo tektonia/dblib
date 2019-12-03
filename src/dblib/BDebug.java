@@ -12,9 +12,9 @@ import javax.swing.JLabel;
 
 /**
  * Class to aid message visualisation of a program.
- * <br/>A window is created with a non volatile text area.
- * <br/>It contains several methods to write Strings, and clean the whole text area.
- * <br/>All methods are static
+ * <br>A window is created with a non volatile text area.
+ * <br>It contains several methods to write Strings, and clean the whole text area.
+ * <br>All methods are static
  * 
  * @author Vitor - 2014
  */
@@ -32,7 +32,7 @@ public class BDebug extends JFrame {
 	private static boolean ignora=false;
 
     /**
-     * <h4>BDebug</h4>
+     * <h2>BDebug</h2>
      * <pre>public BDebug(int x, int y, int c, int a)</pre>
      * <p>Creates a window at (x,y) with size lxh for writing text.</p>
      * 
@@ -47,14 +47,13 @@ public class BDebug extends JFrame {
 	}
 	
 	/**
-	 * <h4>BDebug</h4><pre>public BDebug()</pre>
+	 * <h2>BDebug</h2><pre>public BDebug()</pre>
      * <p>Creates a window for writing text.</p> 
 	 */
 	public BDebug(){createWindow();}
 	
 	/**
-	 * <H4>novo</H4>
-     * <pre>public static void novo()</pre>
+	 * <h3>createWindow</h3><pre>public static void createWindow()</pre>
      * <p>Creates a window for text writing</p>
 	 */
     public static void createWindow() {
@@ -95,7 +94,7 @@ public class BDebug extends JFrame {
     
     
 	/**
-	 * <h4>showAt</h4>
+	 * <h3>showAt</h3>
      * <pre>public static void showAt(int x, int y)</pre>
      * <p> Position window at ( x , y )</p>
 	 * <p>
@@ -108,12 +107,12 @@ public class BDebug extends JFrame {
 	}
 	
 	/**
-	 * <h4>changeLine</h4>
+	 * <h3>changeLine</h3>
 	 * changeLine Changes line on text area
 	 */
 	public static void changeLine(){ jDebug.append("\n"); }
 	
-	/** <h4>write(String str)</h4>
+	/** <h3>write(String str)</h3>
 	 * <p>write a String str
 	 * @param str shows the string on the text area
 	 */
@@ -123,10 +122,10 @@ public class BDebug extends JFrame {
 	  }
 	
 	/**
-	 * <h4>String write(String str, String val)</h4>
+	 * <h3>String write(String str, String val)</h3>
 	 * <p> Writes a string concatenated with <code>val</code>
 	 * @param str	message to write before {@code val}
-	 * @param valor - Text
+	 * @param val - Text
 	 * @return <code>val</code>
 	 */
 	public static String write(String str, String val){
@@ -137,11 +136,11 @@ public class BDebug extends JFrame {
 	  }
 	
 	/**
-	 * <h4>write(String s, byte []val)</h4>
+	 * <h3>write(String s, byte []val)</h3>
      * <pre>public static byte [] write(String s, byte []val)</pre>
 	 * <p> Writes a string concatenated with<code>val</code></p>
 	 * @param s - message to write before {@code val}
-	 * @param valor - byte array
+	 * @param val - byte array
 	 * @return <code>val</code>
 	 */
 	public static byte [] write(String s, byte []val){
@@ -156,7 +155,7 @@ public class BDebug extends JFrame {
 	  }
 
 	/**
-	 * <h4>write</h4>
+	 * <h3>write</h3>
      * <pre>public static int write(String str, int i) </pre>
      * <p>Writes an integer in the text area and returns its value unchanged.</p>
      * @param str - message to write before {@code i}
@@ -171,9 +170,9 @@ public class BDebug extends JFrame {
 	}	
 
 	/**
-	 * <h4>hex</h4>
+	 * <h3>hex</h3>
      * <pre>public static byte[] hexa(String str, byte[] frame)</pre>
-     *  <p> Writes a string concatenated with<code>frame</code></p>
+     *  <p> Writes a string concatenated with<code>frame</code><br>
 	 *  The frame is presented as bytes separated by a space and coded as two hexadecimal characters
 	 * </p>
 	 * @param str - message to write before {@code frame}
@@ -193,10 +192,10 @@ public class BDebug extends JFrame {
 	}
 	   
 	/**
-	 * <h4>visible</h4>
+	 * <h3>visible</h3>
      * <pre>public static void visible(boolean b)</pre>
 	 * <p> Sets the window visibility with <code>b</code></p>
-	 * @param b	makes the window visible if {@value true}
+	 * @param b	makes the window visible
 	 */
 	public static void visible(boolean b){
 		debugFrame.setVisible(b);
@@ -204,7 +203,7 @@ public class BDebug extends JFrame {
 	}
 	   
 	/**
-	 * <h4>clean</h4>
+	 * <h3>clean</h3>
      * <pre>public static void clean()</pre>
      * <p>Clears all content of the text area</p> 
 	 */

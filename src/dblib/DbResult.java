@@ -4,6 +4,7 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Vector;
 
 /**
  * Class to give support to the results of a SQL command over a database
@@ -14,16 +15,29 @@ import java.util.ArrayList;
  *
  */
 public class DbResult {
-  private ResultSet resSet;
+  private ResultSet resSet=null;
   private String mensagem;
+  private int resNum=0;
+  private int errCode=0;
 	
-  DbResult(ResultSet res, String msg){
+  DbResult(ResultSet res, int err, String msg){
 	resSet=res;
+	errCode=err;
 	mensagem= msg==null ? "" : msg;
   }
 	
+  DbResult(int num, int err, String msg){
+	resNum=num;
+	errCode=err;
+	mensagem= msg==null ? "" : msg;
+  }
+  
+  public int resNum() { return resNum;}
+		  
+  public int errCode() { return errCode;}
+  
   /**
-   * <h4>resultSet</h4>
+   * <h3>resultSet</h3>
    * <pre>public ResultSet resultSet()</pre>
    * 
    * <p>Returns the response structure (raw) of a SQL command.</p>
@@ -33,7 +47,7 @@ public class DbResult {
   public ResultSet resultSet() {return resSet;}
 	
   /**
-   * <h4>message</h4>
+   * <h3>message</h3>
    * <pre>public String message()</pre>
    * <p>Returns a message concerning the success or not of an execution of a SQL command</p>
    * 
@@ -42,7 +56,7 @@ public class DbResult {
   public String message() {return mensagem;}
 	
   /**
-   * <h4>attributes</h4>
+   * <h3>attributes</h3>
    * <pre>private Tabela attributes()</pre>
    * 
    * <p>Returns a DbTable object with the name of the attributes.</p>
@@ -68,7 +82,7 @@ public class DbResult {
   }
   
   /**
-   * <h4>rows</h4>
+   * <h3>rows</h3>
    * <pre>public DbTable rows()</pre>
    * 
    * <p>Returns a DbTable of rows resultant from a SQL command.</p>
@@ -94,4 +108,40 @@ public class DbResult {
 	  }
 	  return novaTabela;
 	}
+
+	/**
+	 * <h3>getNumber</h3>
+	 * <pre>public static int getNumber(DbResult res)</pre>
+	 * <br>Gets the first number from the result<br>
+	 * @param res - DbResult from an SQL execution
+	 * @return - a number
+	 */
+	public int getNumber(DbResult res){
+		int size=0;
+		try{
+		  DbTable tab=res.rows();
+		  size=tab.size();
+		  DbRow row=tab.get(0);
+		  String str = row.get(0).toString(); // (line 0 - column names) 1st line, 1st attribute
+		  return Integer.parseInt(str);
+		}
+		catch (Exception e){BDebug.write("getNumber - rowCount: "+size+" Error: "+res.message()+" Exception: "+e.getMessage());}
+		return -1;
+	}
+	
+	public int getNumber(){ return getNumber(this); }
+	
+	public void data(Vector <Vector>dados, Vector <String> atributos) {	
+		if(resSet==null) return;
+		DbTable tab = rows();
+		ArrayList<String> att = tab.attributes();
+		atributos.addAll(att);
+		for(DbRow t :tab){
+			Vector <String>aux = new Vector<String>();
+			// utilizar o aux.addAll();
+			for(DbAttribute s:t) aux.add(s.toString());
+			dados.add(aux);
+		}
+
+	}	
 }

@@ -18,14 +18,15 @@ import java.util.HashMap;
  *
  */
 public class DbSQL {
-	static HashMap <String, TypeComandoSQL>tipoComandos = new HashMap<String, TypeComandoSQL>();
-	static Connection ligacao=null; // this field is updated by the connection: JDBC, ODBC, SQLite, ...
-	static String nomeBd;
-	static String lastError="No error";
-	static String type="UNKOWN";
+	static HashMap <String, TypeCommandSQL>tipoComandos = new HashMap<String, TypeCommandSQL>();
+	Connection ligacao=null; // this field is updated by the connection: JDBC, ODBC, SQLite, ...
+	String nomeBd;
+	String lastError="No error";
+	String type="UNKOWN";
+	private static int debugLevel=1;
 	
 	/**
-	 * <h4>connect</h4>
+	 * <h3>connect</h3>
 	 * <pre>public boolean connect()</pre>
 	 * <p>Established a connection to the database</p>
 	 * 
@@ -51,7 +52,7 @@ public class DbSQL {
 	}
 
 	/**
-	 * <h4>disconnect</h4><pre>public void disconnect()</pre>
+	 * <h3>disconnect</h3><pre>public void disconnect()</pre>
 	 * <p>Disconnects the connection to the database, even if it is not active.</p>
 	 * 
 	 */
@@ -66,7 +67,7 @@ public class DbSQL {
 	}
 	
 	/*
-	 * <h4>init</h></h4><pre>protected static void init(Connection conn)</pre><p>
+	 * <h3>init</h></h3><pre>protected static void init(Connection conn)</pre><p>
 	 *  Inserts all commands in a hash table where each one is associated to the most adequate command to be executed.
 	 * </p>
 	 */
@@ -93,25 +94,30 @@ public class DbSQL {
 	}
 
 	/**
-	 * <h4>executeCommandSQL</h4>
+	 * <h3>executeCommandSQL</h3>
 	 * <pre>public static DbResult executeCommandSQL(String cmd)</pre>
 	 * <p>Executes the SQL command</p>
 	 *  
-	 * @param cmd - SQL command to be executed
+	 * @param command - SQL command to be executed
 	 * @return null - in case of error or <br>DbResult object with the answer
+	 * @throws DbException SQL command execution error
 	 */
-	public DbResult executeCommandSQL(String comando){
+	public DbResult executeCommandSQL(String command) throws DbException{
+		DbResult res=null;
 		if(ligacao == null){
-			BDebug.write("DbSQL.executeCommandSQL: Database is not open.");
-			return null;
+			String msg="DbSQL.executeCommandSQL: Database is not open.";
+			throw new DbException(msg, DbException.Causa.LINK_EXCEPTION);
+			// return null;
 		}
-		TypeComandoSQL cmd=tipoComandos.get(comando.split(" ")[0].toUpperCase());
-		if(cmd!=null) return(cmd.execute(ligacao, comando));
-		else return executeOtherTypeCmdSQL(comando);
+		TypeCommandSQL cmd=tipoComandos.get(command.split(" ")[0].toUpperCase());
+		if(cmd!=null) res=cmd.execute(ligacao, command);
+		else res=executeOtherTypeCmdSQL(command);
+		setLastError(res!=null?res.message():"null");
+		return res;
 	}
 
 	/**
-	 * <h4>executeOtherTypeCmdSQL</h4>
+	 * <h3>executeOtherTypeCmdSQL</h3>
 	 * <pre>private DbResult executeOtherTypeCmdSQL(String cmd)</pre>
 	 * <p>Executes a SQL command that is not in the list filled in by init</p>
 	 *  
@@ -120,8 +126,9 @@ public class DbSQL {
 	 */
 	private DbResult executeOtherTypeCmdSQL(String comando){
 		 ResultSet res=null;
-		 String error="No error...";
+		 String error="\nexecuteOtherTypeCmdSQL: "+comando+" No error...";
 		 String msg="";
+		 int errCode=0;
 		try {
 			ligacao.setAutoCommit(false);//true - cada comando é individual; false - está relacionado com outros - rollback ou commit para executar
 			Statement declaracao =ligacao.createStatement();
@@ -131,27 +138,37 @@ public class DbSQL {
 			}
 		} catch (SQLException e) {
 			msg=e.getMessage();
-			error="\nSQLException DbSQL.executeOtherTypeCmdSQL: "+msg+"\n";
+			errCode=e.getErrorCode();
+			error="\nSQLException DbSQL.executeOtherTypeCmdSQL: "+errCode+" "+msg+"\n";
 		}
 		BDebug.write(error);
 		setLastError(error);
-		return new DbResult(res, msg);
+		return new DbResult(res, errCode, msg);
 	}
 	
 	/**
-	 * <h4>isConnected</h4>
+	 * <h3>isConnected</h3>
 	 * <pre>public boolean isConnected()</pre>
 	 * <p>Indicates if there is a connection to the database</p>
 	 * 
 	 * @return false - No connection to the database<br>
 	 *         true  - Database connection is established.
+	 * @throws DbException SQL command execution error
 	 */
-	public boolean isConnected(){
-		return ligacao!=null;
+	public boolean isConnected() throws DbException{
+		if(ligacao==null) return false;
+		Statement cmd;
+		try {
+			cmd = ligacao.createStatement();
+			cmd.close();
+		} catch (SQLException e) {
+		  throw new DbException("Database Not Connaected", e, DbException.Causa.LINK_EXCEPTION);
+		}
+		return true;
 	}
 	
 	/**
-	 * <h4>close</h4>
+	 * <h3>close</h3>
 	 * 
 	 * <p>public void close()</p>
 	 * 
@@ -161,13 +178,17 @@ public class DbSQL {
 		disconnect();
 	}
 	
-	public static String getType() { return type;}
+	public String getType() { return type;}
 	
-	public static void clearLastError(){ lastError="no error"; }
+	public void clearLastError(){ lastError="no error"; }
 	
-	public static void setLastError(String str){ lastError=str; }
+	public void setLastError(String str){ lastError=str; }
 	
-	public static String getLastError() { return lastError; }
+	public String getLastError() { return lastError; }
+	
+	public static void setDebugLevel(int n) {debugLevel=n;}
+	
+	public static int getDebugLevel() {return debugLevel;}
 	
 	public void lock(){}
 	

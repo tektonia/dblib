@@ -14,14 +14,14 @@ public class DbSQLite extends DbSQL{
 	String erroLigacao="DbSQLite: org.sqlite.JDBC missing.\n";
 	
 	/**
-	 * <h4>DbSQLite</h4>
+	 * <h3>DbSQLite</h3>
 	 * <pre>public BaseDadosSQLite(String name)</pre>
 	 * <p>Creates the necessary structure for a SQLite database connection</p>
 	 *   
 	 * @param name - Database name (if missing <code>"DbSQLite"</code> is used as default)
 	 */	
-	public DbSQLite(String nome) {
-	  nomeBd=nome;
+	public DbSQLite(String name) {
+	  nomeBd=name;
 	  if(nomeBd==null || nomeBd.equals("")) nomeBd="DbSQLite"; // default name
 	  try {
 	    Class.forName("org.sqlite.JDBC");  // Inicializar a classe JDBC
@@ -39,11 +39,10 @@ public class DbSQLite extends DbSQL{
 	  }
 	  //BDebug.visible(true);
 	  BDebug.write( erroLigacao);
-	  setLastError(erroLigacao);
 	}
 	
 	/**
-	 * <h4>lock</h4>
+	 * <h3>lock</h3>
 	 * <pre>public lock()</pre>
 	 * <p>The database connection avoids other program to use the database</p>
 	 *   
@@ -57,11 +56,10 @@ public class DbSQLite extends DbSQL{
 			error="DbSQLite.lock: Unable to lock database:"+e.getMessage();
 		}
 		BDebug.write(error);
-		setLastError(error);
 	}
 	
 	/**
-	 * <h4>unlock</h4>
+	 * <h3>unlock</h3>
 	 * <pre>public unlock()</pre>
 	 * <p>By closing the connection the database can be used by another program</p>
 	 *   
@@ -75,6 +73,5 @@ public class DbSQLite extends DbSQL{
 			error="DbSQLite.unlock: Error while unlocking database:"+e.getMessage();
 		}
 		BDebug.write(error);
-		setLastError(error);
 	}	
 }

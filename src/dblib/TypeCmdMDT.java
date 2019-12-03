@@ -10,7 +10,7 @@ import java.sql.ResultSet;
 //
 // Commands type MDT = {"SHOW"};
 //
-public class TypeCmdMDT extends TypeSubComando{
+public class TypeCmdMDT extends TypeSubCommand{
 
 	static String [] CMD = {"TABLES", "DATABASES"};
 
@@ -23,7 +23,7 @@ public class TypeCmdMDT extends TypeSubComando{
           String tableNamePattern="%";
           String []type={"TABLE", "VIEW"}; //{"TABLE", "VIEW", "SYSTEM TABLE", "GLOBAL TEMPORARY", "LOCAL TEMPORARY", "ALIAS", "SYNONYM"};
           ResultSet rs=md.getTables(catalog, schemaPattern, tableNamePattern,type);
-          return new DbResult(rs,null);
+          return new DbResult(rs,-2,null);
 		}
 	};
 			
@@ -32,7 +32,7 @@ public class TypeCmdMDT extends TypeSubComando{
 		public DbResult execute(Connection conn, String cmd)throws SQLException {
           DatabaseMetaData md = conn.getMetaData();
         //return md.getSchemas();  	// Different from MySQL
-          return new DbResult(md.getCatalogs(),null);  // MySQL 
+          return new DbResult(md.getCatalogs(),-2,null);  // MySQL 
 		}
 	};	
 	

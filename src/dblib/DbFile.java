@@ -55,7 +55,7 @@ public class DbFile {
 	private FileChannel canalIO;
 	
 	/**
-	 * <h4>openForReading</h4>
+	 * <h3>openForReading</h3>
      * <pre>public static boolean openForReading(String name)</pre>
      * <p>Opens file <code>name</code> for reading</p>
 	 * 
@@ -75,7 +75,7 @@ public class DbFile {
 	}
 	
 	/**
-	 * <h4>openForWriting</h4>
+	 * <h3>openForWriting</h3>
      * <pre>public static boolean openForWriting(String name)</pre>
      * <p>Opens file <code>name</code> for writing</p>
 	 * 
@@ -99,7 +99,7 @@ public class DbFile {
 	}	
 	
 	/**
-	 * <h4>close</h4>
+	 * <h3>close</h3>
      * <pre>public static void close()</pre>
      * 
 	 * <p>Closes the file. No further reading or writing on that file after this call.</p>
@@ -117,7 +117,7 @@ public class DbFile {
 	}
 	
 	/**
-	 * <h4>write</h4>
+	 * <h3>write</h3>
      * <pre>public static boolean write(byte [] data)</pre>
      * <p>Writes an array of bytes in the file.</p>
 	 * 
@@ -138,7 +138,7 @@ public class DbFile {
 	}
 	
 	/**
-	 * <h4>read</h4>
+	 * <h3>read</h3>
      * <pre>public static String read()</pre>
      * <p>Reads a string terminated by "\\n" from the file or null if no more data to read</p>
 	 * 
@@ -150,7 +150,7 @@ public class DbFile {
 	}
 
 	/**
-	 * <h4>choseFile</h4>
+	 * <h3>choseFile</h3>
      * <pre>public static File choseFile()</pre>
      * <p>Opens a window to browse and choose a file</p>
 	 * 
@@ -165,19 +165,21 @@ public class DbFile {
 	}
 	
 	/**
-	 * <h4>choseFile</h4>
+	 * <h3>choseFile</h3>
      * <pre>public static File choseFile(String ext, File name)</pre>
-     * <p>Opens a window to browse and choose a file with extension <code>ext</code><\br>
+     * <p>Opens a window to browse and choose a file with extension <code>ext</code><br>
      * and expected name like <code>name</code></p>
 	 * 
+	 * @param ext  extension
+	 * @param name	 name
 	 * @return Returns a File object with the chosen file.
-	 */	
-	public File choseFile(String ext, File nome) {
+	 */
+	public File choseFile(String ext, File name) {
 		ExtensaoFich filtro = new ExtensaoFich(ext);
 		procuraFicheiro.addChoosableFileFilter(filtroTxt);	
 		procuraFicheiro.addChoosableFileFilter(filtro);	
 		procuraFicheiro.setFileFilter(filtro);	
-		procuraFicheiro.setSelectedFile(nome);
+		procuraFicheiro.setSelectedFile(name);
 		if(procuraFicheiro.showOpenDialog(null)!=JFileChooser.APPROVE_OPTION) return null;
 		return file=procuraFicheiro.getSelectedFile();
 	}

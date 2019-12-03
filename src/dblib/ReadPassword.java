@@ -15,7 +15,7 @@ public class ReadPassword {
   String titulo="";
   
   /**
-   * <h4>LerPassword</h4>
+   * <h3>LerPassword</h3>
      * <pre>public LerPassword(String textoPassword)</pre>
      * <p>Cria um objecto para poder vir a ler uma password.</p>
    * 
@@ -26,7 +26,7 @@ public class ReadPassword {
   }
 
   /**
-   * <h4>read</h4>
+   * <h3>read</h3>
    * <pre>public String read()</pre>
    * <p>
    * Opens a window to read a String and returns it after clicking OK button
